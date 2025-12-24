@@ -23,9 +23,13 @@ if (!global.mongoose) {
 }
 
 /**
- * Establishes a connection to MongoDB using Mongoose.
- * Caches the connection to prevent multiple connections during development hot reloads.
- * @returns Promise resolving to the Mongoose instance
+ * Establishes and returns a cached Mongoose connection.
+ *
+ * Uses an in-module cache to avoid creating multiple connections during development hot reloads.
+ *
+ * @returns The established Mongoose instance
+ * @throws If `MONGODB_URI` is not defined in the environment
+ * @throws If establishing the connection fails, rethrows the underlying error
  */
 async function connectDB(): Promise<typeof mongoose> {
   // Return existing connection if available

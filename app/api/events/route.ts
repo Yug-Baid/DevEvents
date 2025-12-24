@@ -4,6 +4,18 @@ import { NextRequest, NextResponse } from "next/server";
 import { resolve } from "path";
 import {v2 as cloudinary} from 'cloudinary'
 
+/**
+ * Create a new event from multipart form data and upload the provided image to Cloudinary.
+ *
+ * Expects a multipart/form-data request with:
+ * - `image`: file to upload (required)
+ * - `tags`: JSON string representing tags
+ * - `agenda`: JSON string representing agenda
+ * - other event fields as form fields
+ *
+ * @param req - NextRequest containing the multipart form data
+ * @returns JSON response object. On success (201) contains `message: "Event created Successfully"` and `event` with the created document. Returns 400 for invalid JSON format or missing image with an explanatory `message`. Returns 500 on other failures with `message: "Event Creation fail"` and an `error` string when available.
+ */
 export async function POST(req:NextRequest) {
     try {
         await connectDB();
@@ -51,6 +63,13 @@ export async function POST(req:NextRequest) {
     }
 }
 
+/**
+ * Retrieve all events sorted by newest first.
+ *
+ * @returns A NextResponse whose JSON body is:
+ * - on success (status 200): { message: "Events Fetched Succesfully", events: Event[] }
+ * - on failure (status 500): { message: "Event fetching failed" }
+ */
 export async function GET(){
     try {
         await connectDB()
